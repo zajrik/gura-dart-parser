@@ -1,0 +1,2 @@
+import "test/importing/files/duplicated_variable_aux_1.ura"
+import "test/importing/files/duplicated_variable_aux_1.ura"
