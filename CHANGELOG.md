@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Add more badges to readme
+
 ## 1.0.3
 
 - Add more badges to readme
