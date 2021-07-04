@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:gura/gura.dart';
-import 'package:path/path.dart';
 
 final String guraString = '''
 # This is a Gura document.
@@ -36,8 +33,4 @@ Future<void> main() async
 
 	// dump: stringifies Map<String, dynamic> as a Gura-compatible string
 	print(dump(parsedGura));
-
-	final File testFile = File('bin/test.ura');
-	final Map<String, dynamic> parsedFile = await parseFile(testFile);
-	print(parsedFile);
 }

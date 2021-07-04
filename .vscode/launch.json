@@ -8,7 +8,7 @@
 		"name": "Dart",
 		"type": "dart",
 		"request": "launch",
-		"program": "bin/gura.dart"
+		"program": "tool/gura.dart"
 	},
 		{
 			"name": "gura",

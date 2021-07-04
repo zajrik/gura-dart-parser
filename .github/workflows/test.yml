@@ -1,4 +1,4 @@
-name: Run Gura parser tests
+name: test
 
 on:
   push:

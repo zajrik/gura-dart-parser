@@ -1,5 +1,9 @@
 # Gura Dart parser
 
+[![Pub Version](https://img.shields.io/pub/v/gura)](https://pub.dev/packages/gura)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/zajrik/gura-dart-parser/test?label=tests)](https://github.com/zajrik/gura-dart-parser/actions/workflows/test.yml)
+[![documentation](https://img.shields.io/badge/Documentation-gura-green.svg)](https://pub.dev/documentation/gura/latest/)
+
 This repository contains the implementation of a [Gura configuration format](https://gura.netlify.app/)
 parser for Dart, written in pure Dart. (Compliant with spec version 1.0.0).
 
