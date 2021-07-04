@@ -13,7 +13,7 @@ class _GuraParser extends _Parser
 
 	/// Parses the given [text] in Gura format.
 	///
-	/// Throws a ParseError if [text] is invalid.
+	/// Throws a [ParseError] if [text] is invalid.
 	///
 	/// Returns a `Map<String, Dynamic>` of the values contained in the text
 	Map<String, dynamic> parse(String text)
@@ -179,6 +179,13 @@ class _GuraParser extends _Parser
 		);
 	}
 
+	/// Gets the last indentation level.
+	///
+	/// Returns the last `int` indentation level, or null if it does not exist
+	int? _getLastIndentationLevel() => _indentationLevels.isNotEmpty
+		? _indentationLevels.last
+		: null;
+
 	/// Removes the last tracked indentation level if it exists
 	void _removeLastIndentationLevel()
 	{
@@ -187,17 +194,17 @@ class _GuraParser extends _Parser
 	}
 
 	/// Matches a new line, which is discarded
-	void newLine()
+	_ParserRule<void> get newLine => _ParserRule(name: 'newLine', fn: ()
 	{
 		final String? res = char('\f\v\r\n');
 		if (res != null)
 			line += 1;
-	}
+	});
 
 	/// Matches with a comment, which is discarded.
 	///
 	/// Returns a `_MatchResult` indicating the presence of a comment
-	_MatchResult<void> comment()
+	_ParserRule<_MatchResult<void>> get comment => _ParserRule(name: 'comment', fn: ()
 	{
 		keyword(['#']);
 
@@ -214,7 +221,7 @@ class _GuraParser extends _Parser
 		}
 
 		return _MatchResult.comment();
-	}
+	});
 
 	/// Matches with a useless line. A line is useless when it contains only
 	/// whitespaces and/or a comment terminating in a newline.
@@ -222,7 +229,7 @@ class _GuraParser extends _Parser
 	/// Throws a [ParseError] if the line contains valid data.
 	///
 	/// Returns an empty `_MatchResult` indicating a useless line was discarded
-	_MatchResult<void> uselessLine()
+	_ParserRule<_MatchResult<void>> get uselessLine => _ParserRule(name: 'uselessLine', fn: ()
 	{
 		// Discard whitespace
 		match([whitespace]);
@@ -245,12 +252,12 @@ class _GuraParser extends _Parser
 		}
 
 		return _MatchResult.uselessLine();
-	}
+	});
 
 	/// Matches with whitespace, taking into consideration indentation levels.
 	///
 	/// Returns the `int` indentation level consumed
-	int whitespaceWithIndentation()
+	_ParserRule<int> get whitespaceWithIndentation => _ParserRule(name: 'whitespaceWithIndentation', fn: ()
 	{
 		int currentIndentationLevel = 0;
 
@@ -270,19 +277,19 @@ class _GuraParser extends _Parser
 		}
 
 		return currentIndentationLevel;
-	}
+	});
 
 	/// Matches with whitespace (spaces and tabs), which is discarded
-	void whitespace()
+	_ParserRule<void> get whitespace => _ParserRule(name: 'whitespace', fn: ()
 	{
 		while (maybeKeyword([' ', '\t']) != null)
 			continue;
-	}
+	});
 
 	/// Matches with a single import statement.
 	///
 	/// Returns a `_MatchResult<String>` containing the file path of the imported file
-	_MatchResult<String> guraImport()
+	_ParserRule<_MatchResult<String>> get guraImport => _ParserRule(name: 'guraImport', fn: ()
 	{
 		// Discard import statement
 		keyword(['import']);
@@ -296,14 +303,14 @@ class _GuraParser extends _Parser
 		maybeMatch([newLine]);
 
 		return _MatchResult.import(fileToImport);
-	}
+	});
 
 	/// Matches with string values using single double-quotes (e.g. `"foo"`) taking
 	/// into consideration any interpolated variables. Used for import statements.
 	/// Does not handle character escaping.
 	///
 	/// Returns the matched string value
-	String quotedStringWithVar()
+	_ParserRule<String> get quotedStringWithVar => _ParserRule(name: 'quotedStringWithVar', fn: ()
 	{
 		final String quote = keyword(['"']);
 		final List<String> characters = [];
@@ -328,12 +335,12 @@ class _GuraParser extends _Parser
 		}
 
 		return characters.join('');
-	}
+	});
 
 	/// Matches with an unquoted string (top-level/object keys).
 	///
 	/// Returns the parsed unquoted string
-	String unquotedString()
+	_ParserRule<String> get unquotedString => _ParserRule(name: 'unquotedString', fn: ()
 	{
 		final List<String> chars = [char(_KEY_ACCEPTABLE_CHARS)];
 
@@ -348,37 +355,40 @@ class _GuraParser extends _Parser
 		}
 
 		return chars.join('').trimRight();
-	}
+	});
 
 	/// Matches with any primitive or complex type.
 	///
 	/// Returns a `_MatchResult<dynamic>?` containing the parsed value
-	_MatchResult<dynamic>? anyType() => maybeMatch([primitiveType]) ?? match([complexType]);
+	_ParserRule<_MatchResult<dynamic>?> get anyType => _ParserRule(
+		name: 'anyType',
+		fn: () => maybeMatch([primitive]) ?? match([complex])
+	);
 
 	/// Matches with a primitive value (null, bool, strings, numbers, or variables values).
 	///
 	/// Returns a `_MatchResult<dynamic>` containing the corresponding parsed value
-	_MatchResult<dynamic> primitiveType()
+	_ParserRule<_MatchResult<dynamic>> get primitive => _ParserRule(name: 'primitiveType', fn: ()
 	{
 		// Discard whitespace
 		maybeMatch([whitespace]);
 
 		return match([nullValue, boolean, basicString, literalString, number, variableValue]);
-	}
+	});
 
 	/// Matches with a list or object.
 	///
 	/// Returns a `_MatchResult<dynamic>?` containing `List<dynamic>` or
 	/// `Map<String, dynamic>` depending on the match
-	_MatchResult<dynamic>? complexType()
-	{
-		return match([list, object]);
-	}
+	_ParserRule<_MatchResult<dynamic>?> get complex => _ParserRule(
+		name: 'complex',
+		fn: () => match([list, object])
+	);
 
 	/// Matches with an already defined variable.
 	///
 	/// Returns a `_MatchResult<dynamic>` containing the variable value
-	_MatchResult<dynamic> variableValue()
+	_ParserRule<_MatchResult<dynamic>> get variableValue => _ParserRule(name: 'variableValue', fn: ()
 	{
 		// Discard `$`
 		keyword(['\$']);
@@ -386,14 +396,14 @@ class _GuraParser extends _Parser
 		final String variableKey = match([unquotedString]);
 
 		return _MatchResult.primitive(_getVariableValue(variableKey));
-	}
+	});
 
 	/// Matches with a variable definition, which will be cached for later use.
 	///
 	/// Throws [DuplicatedVariableError] if the variable is already defined.
 	///
 	/// Returns an empty `_MatchResult` indicating that a variable has been parsed
-	_MatchResult<void> variable()
+	_ParserRule<_MatchResult<void>> get variable => _ParserRule(name: 'variable', fn: ()
 	{
 		// Discard `$`
 		keyword(['\$']);
@@ -414,12 +424,12 @@ class _GuraParser extends _Parser
 		_variables[variableKey] = matchResult.value;
 
 		return _MatchResult.variable();
-	}
+	});
 
 	/// Matches with a list.
 	///
 	/// Returns a `_MatchResult<List<dynamic>>` containing the list value
-	_MatchResult<List<dynamic>> list()
+	_ParserRule<_MatchResult<List<dynamic>>> get list => _ParserRule(name: 'list', fn: ()
 	{
 		final List<dynamic> result = [];
 
@@ -462,7 +472,7 @@ class _GuraParser extends _Parser
 		keyword([']']);
 
 		return _MatchResult.list(result);
-	}
+	});
 
 	/// Matches with an object in the current indentation scope.
 	///
@@ -478,7 +488,7 @@ class _GuraParser extends _Parser
 	/// Returns a `_MatchResult<Tuple2<Map<String, dynamic>, int>>?` containing
 	/// the constructed `Map<String, dynamic>` and the `int` indentation level
 	/// of the parsed key/value pairs
-	_MatchResult<Tuple2<Map<String, dynamic>, int>>? object()
+	_ParserRule<_MatchResult<Tuple2<Map<String, dynamic>, int>>?> get object => _ParserRule(name: 'object', fn: ()
 	{
 		final Map<String, dynamic> result = {};
 		int indentationLevel = 0;
@@ -518,14 +528,14 @@ class _GuraParser extends _Parser
 		return result.isNotEmpty
 			? _MatchResult.object(Tuple2(result, indentationLevel))
 			: null;
-	}
+	});
 
 	/// Matches with a key. A key is an unquoted string followed by a colon (`:`).
 	///
 	/// Throws a [ParseError] if the key is not a valid string (`[a-zA-Z0-9_]+`).
 	///
 	/// Returns the matched key string
-	String key()
+	_ParserRule<String> get key => _ParserRule(name: 'key', fn: ()
 	{
 		final String key = match([unquotedString]);
 
@@ -541,7 +551,7 @@ class _GuraParser extends _Parser
 		keyword([':']);
 
 		return key;
-	}
+	});
 
 	/// Matches with a key/value pair.
 	///
@@ -551,7 +561,7 @@ class _GuraParser extends _Parser
 	///
 	/// Returns `null` if the indentation level is lower than the last parsed
 	/// indentation level, indicating the ending of a parent object
-	_MatchResult<Tuple3<String, dynamic, int>>? pair()
+	_ParserRule<_MatchResult<Tuple3<String, dynamic, int>>?> get pair => _ParserRule(name: 'pair', fn: ()
 	{
 		final int posBeforePair = pos;
 		final int currentIndentationLevel = maybeMatch([whitespaceWithIndentation]) ?? 0;
@@ -566,7 +576,7 @@ class _GuraParser extends _Parser
 		maybeMatch([newLine]);
 
 		// Capture previous indentation level
-		final int? lastIndentationBlock = getLastIndentationLevel();
+		final int? lastIndentationBlock = _getLastIndentationLevel();
 
 		// Check if indentation is divisible by 4
 		if (currentIndentationLevel % 4 != 0)
@@ -624,41 +634,34 @@ class _GuraParser extends _Parser
 		maybeMatch([newLine]);
 
 		return _MatchResult.pair(Tuple3(pairKey, pairValue, currentIndentationLevel));
-	}
-
-	/// Gets the last indentation level.
-	///
-	/// Returns the last `int` indentation level, or null if it does not exist
-	int? getLastIndentationLevel() => _indentationLevels.isNotEmpty
-		? _indentationLevels.last
-		: null;
+	});
 
 	/// Matches with `null` keyword.
 	///
 	/// Returns a [_MatchResult.primitive] containing a `null` value
-	_MatchResult nullValue()
+	_ParserRule<_MatchResult> get nullValue => _ParserRule(name: 'nullValue', fn: ()
 	{
 		// Discard `null` keyword
 		keyword(['null']);
 
 		return _MatchResult.primitive(null);
-	}
+	});
 
 	/// Matches with a boolean value (`true`, `false`)
 	///
 	/// Returns a `_MatchResult<bool>` containing the parsed bool
-	_MatchResult<bool> boolean()
+	_ParserRule<_MatchResult<bool>> get boolean => _ParserRule(name: 'boolean', fn: ()
 	{
 		final bool value = keyword(['true', 'false']) == 'true';
 		return _MatchResult.primitive(value);
-	}
+	});
 
 	/// Matches with numerical values.
 	///
 	/// Throws [ParseError] if the matched value is not a valid number.
 	///
 	/// Returns a `_MatchResult<num>` containing the parsed number value
-	_MatchResult<num> number()
+	_ParserRule<_MatchResult<num>> get number => _ParserRule(name: 'number', fn: ()
 	{
 		final List<String> chars = [char(_ACCEPTABLE_NUMBER_CHARS)];
 
@@ -715,7 +718,7 @@ class _GuraParser extends _Parser
 					throw ParseError(
 						pos: pos + 1,
 						line: line,
-						message: 'Invalid number previx "$prefix"'
+						message: 'Invalid number prefix "$prefix"'
 					);
 			}
 
@@ -752,12 +755,12 @@ class _GuraParser extends _Parser
 		}
 
 		return _MatchResult.primitive(resultValue);
-	}
+	});
 
 	/// Matches with simple/multiline basic strings.
 	///
 	/// Returns a `_MatchResult<String>` containing the parsed string value
-	_MatchResult<String> basicString()
+	_ParserRule<_MatchResult<String>> get basicString => _ParserRule(name: 'basicString', fn: ()
 	{
 		final String quote = keyword(['"""', '"']);
 		final bool isMultiline = quote == '"""';
@@ -825,12 +828,12 @@ class _GuraParser extends _Parser
 		}
 
 		return _MatchResult.primitive(characters.join(''));
-	}
+	});
 
 	/// Matches with simple/multiline literal strings.
 	///
 	/// Returns a `_MatchResult<String>` containing the parsed string value
-	_MatchResult<String> literalString()
+	_ParserRule<_MatchResult<String>> get literalString => _ParserRule(name: 'literalString', fn: ()
 	{
 		final String quote = keyword(["'''", "'"]);
 		final bool isMultiline = quote == "'''";
@@ -853,7 +856,7 @@ class _GuraParser extends _Parser
 		}
 
 		return _MatchResult.primitive(characters.join(''));
-	}
+	});
 
 	/// Converts the given [value] to its Gura-compatible string representation.
 	///

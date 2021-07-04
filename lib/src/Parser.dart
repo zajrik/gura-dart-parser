@@ -59,7 +59,7 @@ class _Parser
 	}
 
 	/// Matches a list of specific chars and returns the first that matched.
-	/// If no match is found, it will throw a ParseError
+	/// If no match is found, it will throw a [ParseError]
 	///
 	/// Matches a list of specific characters from the given [charSet] string.
 	/// This string should be formatted like a regular expression character
@@ -113,7 +113,7 @@ class _Parser
 		throw ParseError(
 			pos: pos + 1,
 			line: line,
-			message: 'Expected "[$charSet]" but got $nextChar'
+			message: 'Expected [$charSet] but got $nextChar'
 		);
 	}
 
@@ -125,7 +125,7 @@ class _Parser
 			throw ParseError(
 				pos: pos + 1,
 				line: line,
-				message: 'Expected ${keywords.join(',')} but got end of string'
+				message: 'Expected [${keywords.join(',')}] but got end of string'
 			);
 		}
 
@@ -153,26 +153,26 @@ class _Parser
 	}
 
 	/// Matches specific rules which must be implemented as a method in a corresponding
-	/// parser. A rule does not match if it throws a ParseError.
+	/// parser. A rule does not match if it throws a [ParseError].
 	///
-	/// Throws ParseError if any of the specified rules matched.
+	/// Throws [ParseError] if none of the specified rules matched.
 	///
 	/// Returns the result of the first matched rule function
-	dynamic match(List<_GuraParserRule> rules)
+	dynamic match(List<_ParserRule> rules)
 	{
-		final List<_GuraParserRule> erroredRules = [];
+		final List<_ParserRule> erroredRules = [];
 
 		ParseError? lastError;
 		int lastErrorPos = -1;
 
-		for (final _GuraParserRule rule in rules)
+		for (final _ParserRule rule in rules)
 		{
 			final int initialPos = pos;
 
 			// Attempt to return rule function result
 			try
 			{
-				return rule();
+				return rule.fn();
 			}
 
 			// Store ParseErrors
@@ -199,17 +199,20 @@ class _Parser
 			}
 		}
 
+		// If we received a single error, throw it
 		if (erroredRules.length == 1)
 		{
 			throw lastError!;
 		}
+
+		// Otherwise throw a ParseError detailing the expected rules
 		else
 		{
 			lastErrorPos = min(text.length - 1, lastErrorPos);
 			throw ParseError(
 				pos: lastErrorPos,
 				line: line,
-				message: 'Expected [${erroredRules.join(', ')}] but got ${text[lastErrorPos]}'
+				message: 'Expected [${erroredRules.map((r) => r.name).join(', ')}] but got ${text[lastErrorPos]}'
 			);
 		}
 	}
@@ -218,7 +221,7 @@ class _Parser
 	String? maybeChar([String? chars]) => _tryReturn(() => char(chars));
 
 	/// Like [match()] but returns null instead of throwing [ParseError]
-	dynamic? maybeMatch(List<_GuraParserRule> rules) => _tryReturn(() => match(rules));
+	dynamic? maybeMatch(List<_ParserRule> rules) => _tryReturn(() => match(rules));
 
 	/// Like [keyword()] but returns null instead of throwing [ParseError]
 	String? maybeKeyword(List<String> keywords) => _tryReturn(() => keyword(keywords));

@@ -15,7 +15,7 @@ part 'src/type/NumberType.dart';
 part 'src/error/GuraError.dart';
 part 'src/error/ValueError.dart';
 
-part 'src/type/GuraParserRule.dart';
+part 'src/type/ParserRule.dart';
 part 'src/type/MatchResult.dart';
 part 'src/type/MatchResultKind.dart';
 
