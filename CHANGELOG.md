@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Add more badges to readme
+
 ## 1.0.2
 
 - Update parser internals to properly print names of expected syntax terms when
