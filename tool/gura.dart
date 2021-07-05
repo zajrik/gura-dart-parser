@@ -39,4 +39,6 @@ Future<void> main() async
 	final File testFile = File('tool/test.ura');
 	final Map<String, dynamic> parsedFile = await parseFile(testFile);
 	print(parsedFile);
+
+	print(parse('foo: !'));
 }

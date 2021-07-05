@@ -295,8 +295,8 @@ class _GuraParser extends _Parser
 		keyword(['import']);
 		char(' ');
 
-		// Capture import
-		final String fileToImport = match([quotedStringWithVar]);
+		// Capture import path
+		final String fileToImport = match([importPath]);
 
 		// Discard whitespace and newline
 		match([whitespace]);
@@ -305,12 +305,14 @@ class _GuraParser extends _Parser
 		return _MatchResult.import(fileToImport);
 	});
 
-	/// Matches with string values using single double-quotes (e.g. `"foo"`) taking
-	/// into consideration any interpolated variables. Used for import statements.
-	/// Does not handle character escaping.
+	/// Matches with import path values.
+	///
+	/// Import path values are surrounded by single double-quotes (e.g. `"foo"`).
+	/// Any variables in the path value will be interpolated into the resulting
+	/// string value. Does not handle character escaping.
 	///
 	/// Returns the matched string value
-	_ParserRule<String> get quotedStringWithVar => _ParserRule(name: 'quotedStringWithVar', fn: ()
+	_ParserRule<String> get importPath => _ParserRule(name: 'importPath', fn: ()
 	{
 		final String quote = keyword(['"']);
 		final List<String> characters = [];
@@ -516,7 +518,7 @@ class _GuraParser extends _Parser
 			}
 
 			// Reset indentation level and break if we are are ending a list,
-			// or if we see a comma im the list which terminates this object
+			// or if we see a comma in the list which terminates this object
 			if (maybeKeyword([']', ',']) != null)
 			{
 				_removeLastIndentationLevel();
@@ -538,14 +540,6 @@ class _GuraParser extends _Parser
 	_ParserRule<String> get key => _ParserRule(name: 'key', fn: ()
 	{
 		final String key = match([unquotedString]);
-
-		if (!(key is String)) {
-			throw ParseError(
-				pos: pos + 1,
-				line: line,
-				message: 'Expected string but got "${text.substring(pos + 1)}"'
-			);
-		}
 
 		// Discard `:`
 		keyword([':']);
@@ -638,7 +632,7 @@ class _GuraParser extends _Parser
 
 	/// Matches with `null` keyword.
 	///
-	/// Returns a [_MatchResult.primitive] containing a `null` value
+	/// Returns a `_MatchResult.primitive` containing a `null` value
 	_ParserRule<_MatchResult> get nullValue => _ParserRule(name: 'nullValue', fn: ()
 	{
 		// Discard `null` keyword
@@ -692,37 +686,14 @@ class _GuraParser extends _Parser
 		// Check hex, octal, and binary numbers
 		if (['0x', '0o', '0b'].contains(prefix))
 		{
-			String withoutPrefix = result.substring(2);
+			final String digits = result.substring(2);
+			final int radix = _match(prefix, {
+				'0x': () => 16,
+				'0o': () => 8,
+				'0b': () => 2,
+			});
 
-			int radix;
-			switch (prefix)
-			{
-				// Handle hex format
-				case '0x':
-					radix = 16;
-					break;
-
-				// Handle octal format
-				case '0o':
-					radix = 8;
-					break;
-
-				// Handle binary format
-				case '0b':
-					radix = 2;
-					break;
-
-				// Shouldn't be possible because of the valid numerical character
-				// set but just in case
-				default:
-					throw ParseError(
-						pos: pos + 1,
-						line: line,
-						message: 'Invalid number prefix "$prefix"'
-					);
-			}
-
-			return _MatchResult.primitive(int.parse(withoutPrefix, radix: radix));
+			return _MatchResult.primitive(int.parse(digits, radix: radix));
 		}
 
 		final String lastThreeChars = result.length >= 3

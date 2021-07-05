@@ -1,7 +1,7 @@
 part of gura;
 
 /// Try/catch the given function and ignore any errors
-void _tryIgnore(dynamic? Function() fn)
+void _tryIgnore(dynamic Function() fn)
 {
 	try { fn(); } catch (e) {}
 }
@@ -12,6 +12,20 @@ T? _tryReturn<T>(T Function() fn)
 {
 	try { return fn(); }
 	on ParseError { return null; }
+}
+
+/// Matches equatable keys to function return values.
+///
+/// Given values must be comparable to the matcher keys via `==`.
+///
+/// Throws [RangeError] if a matcher cannot be found for the given value;
+T _match<K, T>(K value, Map<K, T Function()> matchers)
+{
+	for (final K key in matchers.keys)
+		if (key == value)
+			return matchers[value]!();
+
+	throw RangeError('Matched value did not have an associated match function');
 }
 
 /// Parses the given text following the Gura configuration format.

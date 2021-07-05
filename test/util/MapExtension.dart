@@ -11,7 +11,7 @@ extension MapExtension on Map
 		for (MapEntry<dynamic, dynamic> entry in entries)
 		{
 			final dynamic valA = entry.value;
-			final dynamic? valB = other[entry.key];
+			final dynamic valB = other[entry.key];
 
 			if (valA == null && valB == null)
 				continue;

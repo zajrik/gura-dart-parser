@@ -20,7 +20,7 @@ extension ListExtension<T> on List<T>
 		for (ListEntry<dynamic> entry in entries)
 		{
 			final dynamic valA = entry.value;
-			final dynamic? valB = other[entry.index];
+			final dynamic valB = other[entry.index];
 
 			if (valA == null && valB == null)
 				continue;

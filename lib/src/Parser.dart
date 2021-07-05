@@ -221,7 +221,7 @@ class _Parser
 	String? maybeChar([String? chars]) => _tryReturn(() => char(chars));
 
 	/// Like [match()] but returns null instead of throwing [ParseError]
-	dynamic? maybeMatch(List<_ParserRule> rules) => _tryReturn(() => match(rules));
+	dynamic maybeMatch(List<_ParserRule> rules) => _tryReturn(() => match(rules));
 
 	/// Like [keyword()] but returns null instead of throwing [ParseError]
 	String? maybeKeyword(List<String> keywords) => _tryReturn(() => keyword(keywords));
