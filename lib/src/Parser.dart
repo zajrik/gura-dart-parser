@@ -27,7 +27,7 @@ class _Parser
 
 	/// Generates a list of chars from a list of chars which can contain char
 	/// ranges (i.e. `a-z` or `0-9`)
-	List<String> splitCharRanges(String chars)
+	List<String> _splitCharRanges(String chars)
 	{
 		if (_cache.containsKey(chars))
 			return _cache[chars]!;
@@ -58,17 +58,17 @@ class _Parser
 		return result;
 	}
 
-	/// Matches a list of specific chars and returns the first that matched.
-	/// If no match is found, it will throw a [ParseError]
-	///
 	/// Matches a list of specific characters from the given [charSet] string.
-	/// This string should be formatted like a regular expression character
-	/// set (e.g. `[a-zA-Z]`) without the square-braces, and can include character
+	///
+	/// [charSet] should be formatted like a regular expression character set
+	/// (e.g. `[a-zA-Z]`) without the square-braces, and can include character
 	/// ranges. For example:
 	///
 	/// ```dart
 	/// String character = char('a-zA-Z0-9_');
 	/// ```
+	///
+	/// Throws a [ParserError] if no match is found
 	///
 	/// Returns the first character from the set that is matched in the Gura
 	/// input text
@@ -93,7 +93,7 @@ class _Parser
 			return nextChar;
 		}
 
-		for (final String charRange in splitCharRanges(charSet))
+		for (final String charRange in _splitCharRanges(charSet))
 		{
 			if (charRange.length == 1)
 			{
@@ -125,7 +125,7 @@ class _Parser
 			throw ParseError(
 				pos: pos + 1,
 				line: line,
-				message: 'Expected [${keywords.join(',')}] but got end of string'
+				message: 'Expected [\'${keywords.join('\', \'')}\'] but got end of string'
 			);
 		}
 
@@ -148,16 +148,15 @@ class _Parser
 		throw ParseError(
 			pos: pos + 1,
 			line: line,
-			message: 'Expected one of [${keywords.join(', ')}] but got "${text[pos + 1]}"'
+			message: 'Expected one of [\'${keywords.join('\', \'')}\'] but got "${text[pos + 1]}"'
 		);
 	}
 
-	/// Matches specific rules which must be implemented as a method in a corresponding
-	/// parser. A rule does not match if it throws a [ParseError].
+	/// Matches given [_ParserRule]s. A rule does not match if it throws a [ParseError].
 	///
 	/// Throws [ParseError] if none of the specified rules matched.
 	///
-	/// Returns the result of the first matched rule function
+	/// Returns the result of the first matched rule
 	dynamic match(List<_ParserRule> rules)
 	{
 		final List<_ParserRule> erroredRules = [];
