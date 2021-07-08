@@ -885,8 +885,8 @@ class _GuraParser extends _Parser
 					{
 						result += '${entry.key}:';
 
-						// If the entry value is a Map, split the dumped value by newline
-						// and indent each line before adding it to the result
+						// If the entry value is a Map, split the stringified value by
+						// newline and indent each line before adding it to the result
 						if (entry.value is Map)
 						{
 							result += '\n';
@@ -897,7 +897,7 @@ class _GuraParser extends _Parser
 								result += ' ' * 4 + line + '\n';
 						}
 
-						// Otherwise add the dumped value
+						// Otherwise add the stringified value
 						else
 						{
 							result += ' ${_stringify(entry.value)}\n';
@@ -921,8 +921,8 @@ class _GuraParser extends _Parser
 
 						result += '\n';
 
-						// If the dumped value contains multiple lines, indent all of them
-						// and add them all to the result
+						// If the stringified value contains multiple lines, indent all
+						// of them and add them all to the result
 						if (stringifiedValue.contains('\n'))
 							result += stringifiedValue
 								.split('\n')
