@@ -1,3 +1,7 @@
+## 1.1.0
+
+- Rewrite `dump()` function to produce more readable, consistent output
+
 ## 1.0.4
 
 - Add more badges to readme

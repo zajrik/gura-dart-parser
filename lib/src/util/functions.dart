@@ -101,8 +101,8 @@ Future<Map<String, dynamic>> parseFile(File guraFile, {Map<String, String>? env}
 Map<String, dynamic> parseFileSync(File guraFile, {Map<String, String>? env}) =>
 	parse(guraFile.readAsStringSync(), env: env);
 
-/// Stringifies the given `Map<String, dynamic>` [data] into a Gura-compatible
+/// Stringifies the given `Map<String, dynamic>` [value] into a Gura-compatible
 /// string, which can be written to file if desired.
 ///
 /// Returns the strigified input
-String dump(Map<String, dynamic> data) => _GuraParser.dump(data);
+String dump(Map<String, dynamic> value) => _GuraParser.dump(value);

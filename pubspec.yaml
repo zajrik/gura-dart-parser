@@ -1,6 +1,6 @@
 name: gura
 description: A simple to use library for reading/writing Gura configuration files.
-version: 1.0.4
+version: 1.1.0
 homepage: https://gura.netlify.app/
 repository: https://github.com/zajrik/gura-dart-parser
 issue_tracker: https://github.com/zajrik/gura-dart-parser/issues

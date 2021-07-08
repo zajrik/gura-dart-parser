@@ -831,20 +831,29 @@ class _GuraParser extends _Parser
 
 	/// Converts the given [value] to its Gura-compatible string representation.
 	///
-	/// Must be given an `int` [indentationLevel] to be used for tracking indentation
-	/// when stringifying objects.
+	/// Throws [TypeError] if given anything other than these supported types:
+	/// - `null`
+	/// - `num`, `int`, or `double`
+	/// - `bool`
+	/// - `String`
+	/// - `List<dynamic>`
+	/// - `Map<String, dynamic>`
 	///
 	/// Returns the stringified [value]
-	static String _stringifyValue(dynamic value, int indentationLevel)
+	static String _stringify(dynamic value)
 	{
+		final String valueType = value.runtimeType.toString();
+
 		if (value == null)
 			return 'null';
 
-		final String valueType = value.runtimeType.toString();
-
-		switch (valueType) {
+		switch (valueType)
+		{
 			case 'String':
 				return '"$value"';
+
+			case 'bool':
+				return value.toString();
 
 			case 'num':
 			case 'int':
@@ -864,45 +873,83 @@ class _GuraParser extends _Parser
 				// Otherwise return normal number
 				return value.toString();
 
-			case 'bool':
-				return value ? 'true' : 'false';
-
 			// Generic types are a bit more complex so defer to checking the actual
 			// type, as any given list or map type will inherit from List/Map if
 			// they are not those types directly (i.e. _InternalLinkedHashMap, etc.)
 			default:
-				if (value is List)
+				if (value is Map)
 				{
-					final List<String> listValues = value
-						.map((item) => _stringifyValue(item, indentationLevel))
-						.toList();
+					String result = '';
 
-					return '[' + listValues.join(', ') + ']';
+					for (final MapEntry<dynamic, dynamic> entry in value.entries)
+					{
+						result += '${entry.key}:';
+
+						// If the entry value is a Map, split the dumped value by newline
+						// and indent each line before adding it to the result
+						if (entry.value is Map)
+						{
+							result += '\n';
+
+							final String stringifiedValue = _stringify(entry.value).trimRight();
+
+							for (final String line in stringifiedValue.split('\n'))
+								result += ' ' * 4 + line + '\n';
+						}
+
+						// Otherwise add the dumped value
+						else
+						{
+							result += ' ${_stringify(entry.value)}\n';
+						}
+					}
+
+					return result;
+				}
+				else if (value is List)
+				{
+					final bool shouldMultiline = value.any((element) => element is Map);
+
+					if (!shouldMultiline)
+						return '[${value.map((e) => _stringify(e)).join(', ')}]';
+
+					String result = '[';
+
+					for (final ListEntry<dynamic> entry in value.entries)
+					{
+						final String stringifiedValue = _stringify(entry.value).trimRight();
+
+						result += '\n';
+
+						// If the dumped value contains multiple lines, indent all of them
+						// and add them all to the result
+						if (stringifiedValue.contains('\n'))
+							result += stringifiedValue
+								.split('\n')
+								.map((element) => ' ' * 4 + element)
+								.join('\n');
+
+						// Otherwise indent the value and add to result
+						else
+							result += ' ' * 4 + stringifiedValue;
+
+						// Add a comma if this entry is not the final entry in the list
+						if (entry.index < value.length - 1)
+							result += ',';
+					}
+
+					result += '\n]';
+
+					return result;
 				}
 
-				if (value is Map)
-					return '\n' + dump(value as Map<String, dynamic>, indentationLevel + 1);
+				throw TypeError();
 		}
-
-		return '';
 	}
 
 	/// Stringifies the given `Map<String, dynamic>` [data] into a Gura-compatible
 	/// string, which can be written to file if desired.
 	///
 	/// Returns the strigified input
-	static String dump(Map<String, dynamic> data, [int indentationLevel = 0])
-	{
-		String result = '';
-
-		for (final MapEntry<String, dynamic> entry in data.entries)
-		{
-			final String indentation = ' ' * (indentationLevel * 4);
-			result += '$indentation${entry.key}: ';
-			result += _stringifyValue(entry.value, indentationLevel);
-			result += '\n';
-		}
-
-		return result;
-	}
+	static String dump(Map<String, dynamic> data) => _stringify(data);
 }

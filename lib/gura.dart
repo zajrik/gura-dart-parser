@@ -7,6 +7,8 @@ import 'dart:math';
 import 'package:path/path.dart';
 import 'package:tuple/tuple.dart';
 
+import 'src/util/ListEntry.dart';
+
 // Private lib components:
 part 'src/util/extensions.dart';
 part 'src/util/constants.dart';
@@ -21,6 +23,8 @@ part 'src/type/MatchResultKind.dart';
 
 part 'src/Parser.dart';
 part 'src/GuraParser.dart';
+
+part 'src/util/ListExtension.dart';
 
 // Public lib components:
 part 'src/util/functions.dart';
