@@ -179,7 +179,7 @@ String _stringify(dynamic value)
 
 	if (value is List)
 	{
-		final bool shouldMultiline = value.any((element) => element is Map);
+		final bool shouldMultiline = value.any((element) => element is Map || element is List);
 
 		if (!shouldMultiline)
 			return '[${value.map((e) => _stringify(e)).join(', ')}]';
