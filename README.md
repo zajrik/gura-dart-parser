@@ -63,9 +63,9 @@ import 'package:gura/gura.dart';
 
 Future<void> main() async
 {
-	final File guraFile = File('foo_bar.ura');
-	final Map<String, dynamic> parsedGura = await parseFile(guraFile);
-	...
+    final File guraFile = File('foo_bar.ura');
+    final Map<String, dynamic> parsedGura = await parseFile(guraFile);
+    ...
 }
 ```
 
@@ -75,9 +75,9 @@ import 'package:gura/gura.dart';
 
 void main()
 {
-	final File guraFile = File('foo_bar.ura');
-	final Map<String, dynamic> parsedGura = parseFileSync(guraFile);
-	...
+    final File guraFile = File('foo_bar.ura');
+    final Map<String, dynamic> parsedGura = parseFileSync(guraFile);
+    ...
 }
 ```
 
@@ -91,9 +91,9 @@ import 'package:gura/gura.dart' as gura;
 
 void main()
 {
-	final File guraFile = File('foo_bar.ura');
-	final Map<String, dynamic> parsedGura = await gura.parseFile(guraFile);
-	...
+    final File guraFile = File('foo_bar.ura');
+    final Map<String, dynamic> parsedGura = await gura.parseFile(guraFile);
+    ...
 }
 ```
 
