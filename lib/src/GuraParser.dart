@@ -676,7 +676,10 @@ class _GuraParser extends _Parser
 		}
 
 		// Replace numerical separators as Dart does not currently support them
-		final String result = chars.join('').trimRight().replaceAll(RegExp('_'), '');
+		final String result = chars
+			.join('')
+			.trimRight()
+			.replaceAll('_', '');
 
 		// Capture potential number literal prefix
 		final String prefix = result.length >= 2

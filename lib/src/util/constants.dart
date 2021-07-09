@@ -1,5 +1,8 @@
 part of gura;
 
+// Single indent string
+const String _INDENT = '    ';
+
 // Number chars
 const String _BASIC_NUMBERS_CHARS = '0-9';
 const String _HEX_OCT_BIN = 'A-Fa-fxob';

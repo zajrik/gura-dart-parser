@@ -164,7 +164,7 @@ String _stringify(dynamic value)
 				final String stringifiedValue = _stringify(entry.value).trimRight();
 
 				for (final String line in stringifiedValue.split('\n'))
-					result += ' ' * 4 + line + '\n';
+					result += _INDENT + line + '\n';
 			}
 
 			// Otherwise add the stringified value
@@ -197,12 +197,12 @@ String _stringify(dynamic value)
 			if (stringifiedValue.contains('\n'))
 				result += stringifiedValue
 					.split('\n')
-					.map((element) => ' ' * 4 + element)
+					.map((element) => _INDENT + element)
 					.join('\n');
 
 			// Otherwise indent the value and add to result
 			else
-				result += ' ' * 4 + stringifiedValue;
+				result += _INDENT + stringifiedValue;
 
 			// Add a comma if this entry is not the final entry in the list
 			if (entry.index < value.length - 1)
