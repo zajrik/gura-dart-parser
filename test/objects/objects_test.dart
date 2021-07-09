@@ -1,7 +1,6 @@
 import 'package:gura/gura.dart';
 import 'package:test/test.dart';
 
-import '../util/util_extensions.dart';
 import '../util/util_functions.dart';
 
 void main()
@@ -30,13 +29,13 @@ void main()
 		test('are successfully parsed from a variety of objects', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'normal.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('are successfully parsed with comments', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'with_comments.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('parsing fails on invalid objects', ()

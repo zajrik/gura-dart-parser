@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:gura/gura.dart';
 import 'package:test/test.dart';
 
-import '../util/util_extensions.dart';
 import '../util/util_functions.dart';
+import '../util/StringExtension.dart';
 
 void main()
 {
@@ -27,13 +27,13 @@ void main()
 		test('successfully imports other files', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'normal.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('successfully imports with a variable in path value', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'with_variable.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('successfully imports files with absolute paths', () async
@@ -49,7 +49,7 @@ void main()
 
 			await tempFile.delete();
 
-			expect(parsedData.deepEquals(tempExpected), equals(true));
+			expect(parsedData, equals(tempExpected));
 		});
 
 		test('fails on invalid imports (FileNotFoundError)', ()

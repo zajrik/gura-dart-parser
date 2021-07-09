@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 
-import '../util/util_extensions.dart';
 import '../util/util_functions.dart';
 
 void main()
@@ -88,7 +87,7 @@ void main()
 		test('set successfully parses', ()
 		{
 			Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'full.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('test successfully parses NaN values', ()

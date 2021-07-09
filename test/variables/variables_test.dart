@@ -1,7 +1,6 @@
 import 'package:gura/gura.dart';
 import 'package:test/test.dart';
 
-import '../util/util_extensions.dart';
 import '../util/util_functions.dart';
 
 void main()
@@ -24,7 +23,7 @@ void main()
 		test('are successfully defined and utilized', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'normal.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('are successfully loaded from external vars', ()
@@ -37,7 +36,7 @@ void main()
 				env: { envVarName: envValue }
 			);
 
-			expect(parsedData.deepEquals({ 'test': envValue }), equals(true));
+			expect(parsedData, equals({ 'test': envValue }));
 		});
 
 		test('fail to parse with invalid values (bool, null, complex)', ()

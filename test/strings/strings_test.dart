@@ -1,7 +1,6 @@
 import 'package:gura/gura.dart';
 import 'package:test/test.dart';
 
-import '../util/util_extensions.dart';
 import '../util/util_functions.dart';
 
 void main()
@@ -63,7 +62,7 @@ void main()
 				env: { 'env_var_value': 'very' }
 			);
 
-			expect(parsedData.deepEquals(expectedBasic), equals(true));
+			expect(parsedData, equals(expectedBasic));
 		});
 
 		test('are successfully parsed (multi-line strings)', ()
@@ -74,19 +73,19 @@ void main()
 				env: { 'env_var_value': 'Roses' }
 			);
 
-			expect(parsedData.deepEquals(expectedMultilineBasic), equals(true));
+			expect(parsedData, equals(expectedMultilineBasic));
 		});
 
 		test('are successfully parsed (literal strings)', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'literal.ura');
-			expect(parsedData.deepEquals(expectedLiteral), equals(true));
+			expect(parsedData, equals(expectedLiteral));
 		});
 
 		test('are successfully parsed (multi-line literal strings)', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'multiline_literal.ura');
-			expect(parsedData.deepEquals(expectedMultilineLiteral), equals(true));
+			expect(parsedData, equals(expectedMultilineLiteral));
 		});
 
 		test('error when interpolating undefined variables', ()

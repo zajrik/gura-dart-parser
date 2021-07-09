@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 
-import '../util/util_extensions.dart';
 import '../util/util_functions.dart';
 
 void main()
@@ -61,18 +60,12 @@ void main()
 	{
 		test('successfully parse with normal values', ()
 		{
-			expect(
-				getParsedFileContent(parentFolder, 'normal.ura').deepEquals(expected),
-				equals(true)
-			);
+			expect(getParsedFileContent(parentFolder, 'normal.ura'), equals(expected));
 		});
 
 		test('successfully parse with comments interspersed', ()
 		{
-			expect(
-				getParsedFileContent(parentFolder, 'with_comments.ura').deepEquals(expected),
-				equals(true)
-			);
+			expect(getParsedFileContent(parentFolder, 'with_comments.ura'), equals(expected));
 		});
 
 		test('successfully parse inside of objects', ()
@@ -82,7 +75,7 @@ void main()
 				'array_in_object.ura'
 			);
 
-			expect(parsedData.deepEquals(expectedInsideObject), equals(true));
+			expect(parsedData, equals(expectedInsideObject));
 		});
 
 		test('successfully parse with trailing commas inside of objects', ()
@@ -92,7 +85,7 @@ void main()
 				'array_in_object_trailing_comma.ura'
 			);
 
-			expect(parsedData.deepEquals(expectedInsideObject), equals(true));
+			expect(parsedData, equals(expectedInsideObject));
 		});
 	});
 }

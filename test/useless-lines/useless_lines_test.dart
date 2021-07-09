@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 
-import '../util/util_extensions.dart';
 import '../util/util_functions.dart';
 
 void main()
@@ -53,43 +52,43 @@ void main()
 		test('are absent and file parses successfully', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'without.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('on top of the file are ignored and file parses successfully', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'on_top.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('on bottom of the file are ignored and file parses successfully', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'on_bottom.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('on top and bottom of file are ignored and file parses successfully', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'on_both.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('in the middle of the file are ignored and file parses successfully', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'in_the_middle.ura');
-			expect(parsedData.deepEquals(expected), equals(true));
+			expect(parsedData, equals(expected));
 		});
 
 		test('are absent and object parses successfully', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'without_object.ura');
-			expect(parsedData.deepEquals(expectedObject), equals(true));
+			expect(parsedData, equals(expectedObject));
 		});
 
 		test('in the middle of an object are ignored and object parses successfully', ()
 		{
 			final Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'in_the_middle_object.ura');
-			expect(parsedData.deepEquals(expectedObject), equals(true));
+			expect(parsedData, equals(expectedObject));
 		});
 
 		test('in the middle of a complex object are ignored and complex object parses successfully', ()
@@ -99,7 +98,7 @@ void main()
 				'in_the_middle_object_complex.ura'
 			);
 
-			expect(parsedData.deepEquals(expectedObjectComplex), equals(true));
+			expect(parsedData, equals(expectedObjectComplex));
 		});
 	});
 }

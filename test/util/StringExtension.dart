@@ -1,4 +1,4 @@
-part of util_extensions;
+import 'package:path/path.dart';
 
 extension StringExtension on String
 {

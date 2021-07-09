@@ -1,8 +1,6 @@
 import 'package:gura/gura.dart';
 import 'package:test/test.dart';
 
-import 'util/util_extensions.dart';
-
 void main()
 {
 	final Map<String, dynamic> expectedObj = {
@@ -84,7 +82,7 @@ foo: [
 		test('output produces the original input when re-parsed', ()
 		{
 			final String dumpedInput = dump(expectedObj);
-			expect(parse(dumpedInput).deepEquals(expectedObj), equals(true));
+			expect(parse(dumpedInput), equals(expectedObj));
 		});
 	});
 }
