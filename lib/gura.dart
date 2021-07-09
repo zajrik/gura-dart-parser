@@ -24,8 +24,6 @@ part 'src/type/MatchResultKind.dart';
 part 'src/Parser.dart';
 part 'src/GuraParser.dart';
 
-part 'src/util/ListExtension.dart';
-
 // Public lib components:
 part 'src/util/functions.dart';
 
