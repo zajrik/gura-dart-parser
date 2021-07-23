@@ -7,7 +7,7 @@ class _Parser
 	int line = 1;
 	int len = 0;
 
-	final Map<String, List<String>> _cache = {};
+	final Map<String, List<String>> _charSetCache = {};
 
 	_Parser();
 
@@ -29,8 +29,8 @@ class _Parser
 	/// ranges (i.e. `a-z` or `0-9`)
 	List<String> _splitCharRanges(String chars)
 	{
-		if (_cache.containsKey(chars))
-			return _cache[chars]!;
+		if (_charSetCache.containsKey(chars))
+			return _charSetCache[chars]!;
 
 		final List<String> result = [];
 		final int length = chars.length;
@@ -54,7 +54,7 @@ class _Parser
 			}
 		}
 
-		_cache[chars] = result;
+		_charSetCache[chars] = result;
 		return result;
 	}
 
@@ -131,12 +131,12 @@ class _Parser
 
 		for (final String keyword in keywords)
 		{
-			final int low = pos + 1;
-			final int high = low + keyword.length;
+			final int start = pos + 1;
+			final int end = start + keyword.length;
 
 			String slice = '';
 
-			_tryIgnore(() => slice = text.substring(low, high));
+			_tryIgnore(() => slice = text.substring(start, end));
 
 			if (slice == keyword)
 			{

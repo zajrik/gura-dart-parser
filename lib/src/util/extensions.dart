@@ -2,16 +2,8 @@ part of gura;
 
 extension on String
 {
- 	// ignore: unused_element
-	bool operator >(String other) => compareTo(other) > 0;
-
-	// ignore: unused_element
-	bool operator <(String other) => compareTo(other) < 0;
-
-	// ignore: unused_element
 	bool operator >=(String other) => compareTo(other) >= 0;
 
-	// ignore: unused_element
 	bool operator <=(String other) => compareTo(other) <= 0;
 
 	/// Returns this string joined with the given path segment strings and normalized
