@@ -85,7 +85,6 @@ integers3: [
   2, # Trailing comma
 ]
 
-
 $my_string_var: "127.0.0.1"
 $my_integer_var: 8080
 
@@ -96,3 +95,5 @@ my_server:
 
 $name: "Gura"
 gura_is_cool: "$name is cool"
+
+empty_object: empty

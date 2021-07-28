@@ -375,7 +375,7 @@ class _GuraParser extends _Parser
 		// Discard whitespace
 		maybeMatch([whitespace]);
 
-		return match([nullValue, boolean, basicString, literalString, number, variableValue]);
+		return match([nullValue, emptyObject, boolean, basicString, literalString, number, variableValue]);
 	});
 
 	/// Matches with a list or object.
@@ -640,6 +640,17 @@ class _GuraParser extends _Parser
 
 		return _MatchResult.primitive(null);
 	});
+
+    /// Matches with `empty` keyword
+    ///
+    /// Returns a `_MatchResult.primitive` containing an empty `Map<String, dynamic>`
+    _ParserRule<_MatchResult<Map<String, dynamic>>> get emptyObject => _ParserRule(name: 'emptyObject', fn: ()
+    {
+        // Discard `empty` keyword
+        keyword(['empty']);
+
+        return _MatchResult.primitive({});
+    });
 
 	/// Matches with a boolean value (`true`, `false`)
 	///

@@ -79,7 +79,8 @@ void main()
 			'port': 8080,
 			'native_auth': true
 		},
-		'gura_is_cool': 'Gura is cool'
+		'gura_is_cool': 'Gura is cool',
+        'empty_object': {}
 	};
 
 	group('Full', ()
@@ -94,9 +95,7 @@ void main()
 		{
 			Map<String, dynamic> parsedData = getParsedFileContent(parentFolder, 'nan.ura');
 			for (final MapEntry<String, dynamic> entry in parsedData.entries)
-			{
 				expect((entry.value as double).isNaN, equals(true));
-			}
 		});
 	});
 }

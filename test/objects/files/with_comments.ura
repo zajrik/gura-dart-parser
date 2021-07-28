@@ -21,3 +21,6 @@ user2: # COMMENT
     # COMMENT
     surname: "Troilo"
     year_of_birth: 1914
+
+# Empty object
+empty_object: empty
