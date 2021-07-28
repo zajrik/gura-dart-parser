@@ -39,6 +39,14 @@ void main()
 			expect(parsedData, equals(expected));
 		});
 
+		test('are successfully parsed with key literals', ()
+		{
+			expect(
+				parse('`foo bar`: "baz"\n`boo far`: "faz"'),
+				equals({ 'foo bar': 'baz', 'boo far': 'faz' })
+			);
+		});
+
 		test('parsing fails on invalid objects', ()
 		{
 			expect(
@@ -49,6 +57,29 @@ void main()
 			expect(
 				() => getParsedFileContent(parentFolder, 'invalid_2.ura'),
 				throwsA(TypeMatcher<InvalidIndentationError>())
+			);
+		});
+
+		test('parsing fails on literal keys with line breaks/form feeds', ()
+		{
+			expect(
+				() => parse('`foo\nbar`: "baz"'),
+				throwsA(TypeMatcher<ParseError>())
+			);
+
+			expect(
+				() => parse('`foo\r\nbar`: "baz"'),
+				throwsA(TypeMatcher<ParseError>())
+			);
+
+			expect(
+				() => parse('`foo\rbar`: "baz"'),
+				throwsA(TypeMatcher<ParseError>())
+			);
+
+			expect(
+				() => parse('`foo\fbar`: "baz"'),
+				throwsA(TypeMatcher<ParseError>())
 			);
 		});
 	});
