@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Add support for `empty` keyword
+
 ## 1.2.0
 
 - Update `dump()` to multi-line nested arrays. This will better visually represent 2-dimensional arrays.
