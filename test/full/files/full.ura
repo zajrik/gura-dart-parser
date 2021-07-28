@@ -97,3 +97,5 @@ $name: "Gura"
 gura_is_cool: "$name is cool"
 
 empty_object: empty
+
+`foo bar baz`: "boo"

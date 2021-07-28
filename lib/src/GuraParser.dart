@@ -344,19 +344,42 @@ class _GuraParser extends _Parser
 	/// Returns the parsed unquoted string
 	_ParserRule<String> get unquotedString => _ParserRule(name: 'unquotedString', fn: ()
 	{
-		final List<String> chars = [char(_KEY_ACCEPTABLE_CHARS)];
+		final List<String> characters = [char(_KEY_ACCEPTABLE_CHARS)];
 
 		while (true)
 		{
-			final String? char = maybeChar(_KEY_ACCEPTABLE_CHARS);
+			final String? character = maybeChar(_KEY_ACCEPTABLE_CHARS);
 
-			if (char == null)
+			if (character == null)
 				break;
 
-			chars.add(char);
+			characters.add(character);
 		}
 
-		return chars.join('').trimRight();
+		return characters.join('').trimRight();
+	});
+
+	/// Matches with a backtick-quoted string (top-level/object keys, interpreted literally)
+	///
+	/// Returns the parsed backtick string
+	_ParserRule<String> get backtickString => _ParserRule(name: 'backtickString', fn: ()
+	{
+		// Discard backtick
+		keyword(['`']);
+
+		final List<String> characters = [char()];
+
+		while (true)
+		{
+			final String? character = maybeChar();
+
+			if (character == null || character == '`')
+				break;
+
+			characters.add(character);
+		}
+
+		return characters.join('').trimRight();
 	});
 
 	/// Matches with any primitive or complex type.
@@ -532,14 +555,15 @@ class _GuraParser extends _Parser
 			: null;
 	});
 
-	/// Matches with a key. A key is an unquoted string followed by a colon (`:`).
+	/// Matches with a key. A key is an unquoted string or a backtick-quoted string,
+	/// followed by a colon (`:`).
 	///
 	/// Throws a [ParseError] if the key is not a valid string (`[a-zA-Z0-9_]+`).
 	///
 	/// Returns the matched key string
 	_ParserRule<String> get key => _ParserRule(name: 'key', fn: ()
 	{
-		final String key = match([unquotedString]);
+		final String key = match([backtickString, unquotedString]);
 
 		// Discard `:`
 		keyword([':']);
