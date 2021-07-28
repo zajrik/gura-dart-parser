@@ -641,16 +641,16 @@ class _GuraParser extends _Parser
 		return _MatchResult.primitive(null);
 	});
 
-    /// Matches with `empty` keyword
-    ///
-    /// Returns a `_MatchResult.primitive` containing an empty `Map<String, dynamic>`
-    _ParserRule<_MatchResult<Map<String, dynamic>>> get emptyObject => _ParserRule(name: 'emptyObject', fn: ()
-    {
-        // Discard `empty` keyword
-        keyword(['empty']);
+	/// Matches with `empty` keyword
+	///
+	/// Returns a `_MatchResult.primitive` containing an empty `Map<String, dynamic>`
+	_ParserRule<_MatchResult<Map<String, dynamic>>> get emptyObject => _ParserRule(name: 'emptyObject', fn: ()
+	{
+		// Discard `empty` keyword
+		keyword(['empty']);
 
-        return _MatchResult.primitive({});
-    });
+		return _MatchResult.primitive({});
+	});
 
 	/// Matches with a boolean value (`true`, `false`)
 	///

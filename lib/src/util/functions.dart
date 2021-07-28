@@ -149,6 +149,9 @@ String _stringify(dynamic value)
 
 	if (value is Map)
 	{
+		if (value.isEmpty)
+			return 'empty';
+
 		String result = '';
 
 		for (final MapEntry<dynamic, dynamic> entry in value.entries)
@@ -179,7 +182,7 @@ String _stringify(dynamic value)
 
 	if (value is List)
 	{
-		final bool shouldMultiline = value.any((element) => element is Map || element is List);
+		final bool shouldMultiline = value.any((e) => (e is Map || e is List) && e.isNotEmpty);
 
 		if (!shouldMultiline)
 			return '[${value.map((e) => _stringify(e)).join(', ')}]';

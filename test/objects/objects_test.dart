@@ -22,7 +22,7 @@ void main()
 			'surname': 'Troilo',
 			'year_of_birth': 1914
 		},
-        'empty_object': {}
+		'empty_object': {}
 	};
 
 	group('Objects', ()

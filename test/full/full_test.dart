@@ -80,7 +80,7 @@ void main()
 			'native_auth': true
 		},
 		'gura_is_cool': 'Gura is cool',
-        'empty_object': {}
+		'empty_object': {}
 	};
 
 	group('Full', ()
