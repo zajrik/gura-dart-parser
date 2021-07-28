@@ -1,6 +1,8 @@
-## 1.2.1
+## 1.3.0
 
 - Add support for `empty` keyword
+- Change how dump handles stringifying nested arrays
+  - Arrays will no longer line-break if they contain only empty arrays (e.g. `[[]. []. []]`)
 
 ## 1.2.0
 
