@@ -624,6 +624,14 @@ class _GuraParser extends _Parser
 			pairValue = matchResult.value;
 		}
 
+		// Indentation tracking can get messed up in nested lists so reset indentation
+		// to the start of this pair if the pair value is a list to be safe
+		if (pairValue is List)
+		{
+			_removeLastIndentationLevel();
+			_indentationLevels.add(currentIndentationLevel);
+		}
+
 		// Discard newline
 		maybeMatch([newLine]);
 

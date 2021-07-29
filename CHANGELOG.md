@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Fix error parsing additional pairs following a nested list
+
 ## 1.3.0
 
 - Add support for `empty` keyword
