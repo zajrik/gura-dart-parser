@@ -160,7 +160,11 @@ String _stringify(dynamic value)
 
 		for (final MapEntry<dynamic, dynamic> entry in value.entries)
 		{
-			result += '${entry.key}:';
+			final String key = RegExp('[^$_KEY_ACCEPTABLE_CHARS]').hasMatch(entry.key)
+				? '`${entry.key}`'
+				: entry.key;
+
+			result += '$key:';
 
 			// If the entry value is a Map, split the stringified value by
 			// newline and indent each line before adding it to the result
