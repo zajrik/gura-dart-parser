@@ -87,5 +87,13 @@ void main()
 
 			expect(parsedData, equals(expectedInsideObject));
 		});
+
+		test('successfully parse with pair following nested array', ()
+		{
+			expect(
+				() => getParsedFileContent(parentFolder, 'pair_following_nested_array.ura'),
+				returnsNormally
+			);
+		});
 	});
 }
