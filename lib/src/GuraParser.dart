@@ -377,13 +377,7 @@ class _GuraParser extends _Parser
 				break;
 
 			if (RegExp('[\r\n\f]').hasMatch(character))
-			{
-				throw ParseError(
-					pos: pos + 1,
-					line: line,
-					message: 'Line breaks/form feed are not allowed in key literals'
-				);
-			}
+				throw InvalidKeyError('Line breaks/form feed are not allowed in literal keys');
 
 			characters.add(character);
 		}

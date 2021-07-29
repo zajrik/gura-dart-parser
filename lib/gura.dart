@@ -34,4 +34,5 @@ part 'src/error/DuplicatedKeyError.dart';
 part 'src/error/DuplicatedVariableError.dart';
 part 'src/error/FileNotFoundError.dart';
 part 'src/error/InvalidIndentationError.dart';
+part 'src/error/InvalidKeyError.dart';
 part 'src/error/VariableNotDefinedError.dart';
