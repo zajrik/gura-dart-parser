@@ -64,22 +64,22 @@ void main()
 		{
 			expect(
 				() => parse('`foo\nbar`: "baz"'),
-				throwsA(TypeMatcher<ParseError>())
+				throwsA(TypeMatcher<InvalidKeyError>())
 			);
 
 			expect(
 				() => parse('`foo\r\nbar`: "baz"'),
-				throwsA(TypeMatcher<ParseError>())
+				throwsA(TypeMatcher<InvalidKeyError>())
 			);
 
 			expect(
 				() => parse('`foo\rbar`: "baz"'),
-				throwsA(TypeMatcher<ParseError>())
+				throwsA(TypeMatcher<InvalidKeyError>())
 			);
 
 			expect(
 				() => parse('`foo\fbar`: "baz"'),
-				throwsA(TypeMatcher<ParseError>())
+				throwsA(TypeMatcher<InvalidKeyError>())
 			);
 		});
 	});
