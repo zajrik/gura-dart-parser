@@ -121,5 +121,11 @@ foo: """
 				previous = result;
 			}
 		});
+
+		test('produces literal keys (backticked) if key contains invalid key characters', ()
+		{
+			expect(dump({ 'foo bar baz': 'boo' }).trim(), equals('`foo bar baz`: "boo"'));
+			expect(dump({ 'foo%bar:baz': 'boo' }).trim(), equals('`foo%bar:baz`: "boo"'));
+		});
 	});
 }
