@@ -1,6 +1,7 @@
 ## 1.3.2
 
 - Fix string dumping producing invalid strings when the value contains line breaks
+  - Control characters, backslashes, `$`, and double-quotes will now be escaped
 
 ## 1.3.1
 
