@@ -1,6 +1,10 @@
+## 1.3.2
+
+- Fix string dumping producing invalid strings when the value contains line breaks
+
 ## 1.3.1
 
-- Fix error parsing additional pairs following a nested list
+- Fix error when parsing additional pairs following a nested list
 
 ## 1.3.0
 
