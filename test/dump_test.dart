@@ -89,7 +89,7 @@ foo: [
 ]
 ''';
 
-final String complexString = '''
+	final String complexString = '''
 foo: """
 	foo\\nbar\\tbaz
 	foo\\bar\\baz
