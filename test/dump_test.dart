@@ -89,6 +89,14 @@ foo: [
 ]
 ''';
 
+final String complexString = '''
+foo: """
+	foo\\nbar\\tbaz
+	foo\\bar\\baz
+	foo\\\$bar\fbaz
+"""
+'''.trim();
+
 	group('Dump', ()
 	{
 		test('produces the correct output', ()
@@ -100,6 +108,18 @@ foo: [
 		{
 			final String dumpedInput = dump(expectedObj);
 			expect(parse(dumpedInput), equals(expectedObj));
+		});
+
+		test('output containing complex strings can be re-parsed/dumped many times with the same output', ()
+		{
+			String previous = dump(parse(complexString)).trim();
+
+			for (int i = 0; i < 10; i++)
+			{
+				final String result = dump(parse(previous)).trim();
+				expect(result, equals(previous));
+				previous = result;
+			}
 		});
 	});
 }

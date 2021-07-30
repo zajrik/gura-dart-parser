@@ -19,7 +19,7 @@ const String _ACCEPTABLE_NUMBER_CHARS = _BASIC_NUMBERS_CHARS
 // Acceptable chars for keys
 const String _KEY_ACCEPTABLE_CHARS = '0-9A-Za-z_';
 
-// Special characters to be escaped
+// Special characters to be escaped when parsing strings in a Gura file
 const Map<String, String> _ESCAPE_SEQUENCES = {
 	'b': '\b',
 	'f': '\f',
@@ -29,4 +29,16 @@ const Map<String, String> _ESCAPE_SEQUENCES = {
 	'"': '"',
 	'\\': '\\',
 	'\$': '\$'
+};
+
+// Sequences that need escaped when dumping string values
+const Map<String, String> _SEQUENCES_TO_ESCAPE = {
+	'\\': '\\\\',
+	'\b': '\\b',
+	'\f': '\\f',
+	'\n': '\\n',
+	'\r': '\\r',
+	'\t': '\\t',
+	'"': '\\"',
+	'\$': '\\\$',
 };

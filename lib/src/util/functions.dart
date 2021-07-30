@@ -114,18 +114,26 @@ Map<String, dynamic> parseFileSync(File guraFile, {Map<String, String>? env}) =>
 /// Returns the stringified [value]
 String _stringify(dynamic value)
 {
-	final String valueType = value.runtimeType.toString();
-
 	if (value == null)
 		return 'null';
 
-	if (valueType == 'String')
-		return '"$value"';
+	if (value is String)
+	{
+		String result = '';
 
-	if (valueType == 'bool')
+		// Escape everything that needs escaped
+		for (int i = 0; i < value.length; i++)
+			result += _SEQUENCES_TO_ESCAPE.containsKey(value[i])
+				? _SEQUENCES_TO_ESCAPE[value[i]]!
+				: value[i];
+
+		return '"$result"';
+	}
+
+	if (value is bool)
 		return value.toString();
 
-	if (valueType == 'num' || valueType == 'int' || valueType == 'double')
+	if (value is num)
 	{
 		// Handle infinity
 		if (value == double.infinity)
@@ -142,10 +150,6 @@ String _stringify(dynamic value)
 		// Otherwise return normal number
 		return value.toString();
 	}
-
-	// Generic types are a bit more complex so defer to checking the actual
-	// type, as any given list or map type will inherit from List/Map if
-	// they are not those types directly (i.e. _InternalLinkedHashMap, etc.)
 
 	if (value is Map)
 	{
