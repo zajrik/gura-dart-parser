@@ -164,7 +164,7 @@ String _stringify(dynamic value)
 
 			// If the entry value is a Map, split the stringified value by
 			// newline and indent each line before adding it to the result
-			if (entry.value is Map)
+			if (entry.value is Map && (entry.value as Map).isNotEmpty)
 			{
 				result += '\n';
 
