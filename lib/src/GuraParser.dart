@@ -567,7 +567,6 @@ class _GuraParser extends _Parser
 
 		// Discard whitespace
 		maybeMatch([whitespace]);
-		maybeMatch([newLine]);
 
 		// Capture previous indentation level
 		final int? lastIndentationBlock = _getLastIndentationLevel();
