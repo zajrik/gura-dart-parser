@@ -1,3 +1,8 @@
+## 1.3.3
+
+- Fix empty object dumping adding newline + indentation
+- Disallow newline before non-object values
+
 ## 1.3.2
 
 - Fix string dumping producing invalid strings when the value contains line breaks
